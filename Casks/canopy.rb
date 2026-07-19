@@ -11,17 +11,18 @@ cask "canopy" do
 
   app "Canopy.app"
 
-  # not notarized yet — clear the quarantine attribute on install
+  # not notarized yet — remove ONLY the quarantine attribute on install
+  # (xattr -cr would strip sealed resources and break the ad-hoc signature)
   postflight do
     system_command "/usr/bin/xattr",
-                   args: ["-cr", "#{appdir}/Canopy.app"],
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Canopy.app"],
                    sudo: false
   end
 
   caveats <<~EOS
     Canopy is not notarized yet. If macOS still warns on first launch, use
     System Settings → Privacy & Security → "Open Anyway", or run:
-      xattr -cr "#{appdir}/Canopy.app"
+      xattr -dr com.apple.quarantine "#{appdir}/Canopy.app"
 
     Canopy lives in the menu bar — look for the fork icon after launch.
   EOS
