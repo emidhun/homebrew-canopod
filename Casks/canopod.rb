@@ -1,30 +1,28 @@
 cask "canopod" do
-  version "0.4.7"
-  sha256 "fbcd627edbfbcfe7555d830833ee29e137ab442c6975eea82c0de5919ae0b71a"
+  version "0.5.0"
+  sha256 "c1f993a8479436cfd4d438b1e1ab6b4bcb25d2ca2fe767aa03f8b2f0fc7f37ab"
 
-  # 0.4.7 predates the rename, so its assets and app are still named Canopy.
-  # From 0.5.0: Canopod_#{version}_aarch64.dmg and "Canopod.app".
-  url "https://github.com/emidhun/canopod/releases/download/v#{version}/Canopy_#{version}_aarch64.dmg"
+  url "https://github.com/emidhun/canopod/releases/download/v#{version}/Canopod_#{version}_aarch64.dmg"
   name "Canopod"
   desc "Menu-bar git-worktree and dev-service manager"
   homepage "https://github.com/emidhun/canopod"
 
   depends_on arch: :arm64
 
-  app "Canopy.app"
+  app "Canopod.app"
 
   # not notarized yet — remove ONLY the quarantine attribute on install
   # (xattr -cr would strip sealed resources and break the ad-hoc signature)
   postflight do
     system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Canopy.app"],
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Canopod.app"],
                    sudo: false
   end
 
   caveats <<~EOS
     Canopod is not notarized yet. If macOS still warns on first launch, use
     System Settings → Privacy & Security → "Open Anyway", or run:
-      xattr -dr com.apple.quarantine "#{appdir}/Canopy.app"
+      xattr -dr com.apple.quarantine "#{appdir}/Canopod.app"
 
     Canopod lives in the menu bar — look for the fork icon after launch.
   EOS
